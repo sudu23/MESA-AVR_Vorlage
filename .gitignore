@@ -1,0 +1,25 @@
+# --- MPLAB X Build Artefakte ---
+build/
+dist/
+nbproject/disassembly.list
+nbproject/Makefile-*
+nbproject/Package-*
+
+# --- Nutzerspezifische Dateien (unbedingt ignorieren!) ---
+# Diese Dateien enthalten lokale Pfade und Fenstereinstellungen
+nbproject/private/
+
+# --- Objekt- und Debug-Dateien ---
+*.o
+*.d
+*.elf
+*.hex
+*.cof
+*.map
+*.p1
+*.pre
+
+# --- Backup und temporäre Dateien ---
+*~
+*.bak
+*.tmp
