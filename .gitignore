@@ -23,3 +23,6 @@ nbproject/private/
 *~
 *.bak
 *.tmp
+
+# --- MPLAB X Generierte Dateien ---
+.generated_files/
