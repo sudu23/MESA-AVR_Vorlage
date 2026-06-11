@@ -36,6 +36,8 @@
 
 static void (*IO_PF1_InterruptHandler)(void);
 static void (*IO_PF0_InterruptHandler)(void);
+static void (*IO_PF3_InterruptHandler)(void);
+static void (*IO_PF2_InterruptHandler)(void);
 static void (*IO_PA0_InterruptHandler)(void);
 static void (*IO_PA1_InterruptHandler)(void);
 static void (*IO_PA2_InterruptHandler)(void);
@@ -146,7 +148,7 @@ void PIN_MANAGER_Initialize()
     PORTMUX.ACROUTEA = 0x0;
     PORTMUX.CCLROUTEA = 0x0;
     PORTMUX.EVSYSROUTEA = 0x0;
-    PORTMUX.SPIROUTEA = 0x0;
+    PORTMUX.SPIROUTEA = 0xC;
     PORTMUX.TCAROUTEA = 0x0;
     PORTMUX.TCBROUTEA = 0x0;
     PORTMUX.TCDROUTEA = 0x0;
@@ -158,6 +160,8 @@ void PIN_MANAGER_Initialize()
   // register default ISC callback functions at runtime; use these methods to register a custom function
     IO_PF1_SetInterruptHandler(IO_PF1_DefaultInterruptHandler);
     IO_PF0_SetInterruptHandler(IO_PF0_DefaultInterruptHandler);
+    IO_PF3_SetInterruptHandler(IO_PF3_DefaultInterruptHandler);
+    IO_PF2_SetInterruptHandler(IO_PF2_DefaultInterruptHandler);
     IO_PA0_SetInterruptHandler(IO_PA0_DefaultInterruptHandler);
     IO_PA1_SetInterruptHandler(IO_PA1_DefaultInterruptHandler);
     IO_PA2_SetInterruptHandler(IO_PA2_DefaultInterruptHandler);
@@ -221,6 +225,32 @@ void IO_PF0_DefaultInterruptHandler(void)
 {
     // add your IO_PF0 interrupt custom code
     // or set custom function using IO_PF0_SetInterruptHandler()
+}
+/**
+  Allows selecting an interrupt handler for IO_PF3 at application runtime
+*/
+void IO_PF3_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    IO_PF3_InterruptHandler = interruptHandler;
+}
+
+void IO_PF3_DefaultInterruptHandler(void)
+{
+    // add your IO_PF3 interrupt custom code
+    // or set custom function using IO_PF3_SetInterruptHandler()
+}
+/**
+  Allows selecting an interrupt handler for IO_PF2 at application runtime
+*/
+void IO_PF2_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    IO_PF2_InterruptHandler = interruptHandler;
+}
+
+void IO_PF2_DefaultInterruptHandler(void)
+{
+    // add your IO_PF2 interrupt custom code
+    // or set custom function using IO_PF2_SetInterruptHandler()
 }
 /**
   Allows selecting an interrupt handler for IO_PA0 at application runtime
@@ -871,6 +901,14 @@ ISR(PORTF_PORT_vect)
     if(VPORTF.INTFLAGS & PORT_INT0_bm)
     {
        IO_PF0_InterruptHandler(); 
+    }
+    if(VPORTF.INTFLAGS & PORT_INT3_bm)
+    {
+       IO_PF3_InterruptHandler(); 
+    }
+    if(VPORTF.INTFLAGS & PORT_INT2_bm)
+    {
+       IO_PF2_InterruptHandler(); 
     }
     if(VPORTF.INTFLAGS & PORT_INT4_bm)
     {

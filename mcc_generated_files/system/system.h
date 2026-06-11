@@ -46,6 +46,8 @@ extern "C" {
 #include "../uart/usart2.h"
 #include "../system/interrupt.h"
 #include "../system/clock.h"
+#include "../i2c_host/twi1.h"
+#include "../spi/spi1.h"
 /**
  * @ingroup systemdriver
  * @brief Initializes the System module. This routine is called only once during system initialization, before calling any other API.

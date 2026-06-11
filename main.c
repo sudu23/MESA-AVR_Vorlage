@@ -40,6 +40,8 @@
 #include "util/delay.h"
 #include "cyclesync.h"
 #include "printf.h"
+#include "PCF8574.h"
+#include "DS3234.h"
 
 /*------------------------------------------------------------------------------
     Defines 
@@ -64,6 +66,7 @@
 int main(void)
 {
     //Local Variables
+    ds3234_time_t mytime;
     
     // Initialization microcontroller
     SYSTEM_Initialize();
@@ -80,6 +83,10 @@ int main(void)
     RGBLED_G_SetHigh();
     RGBLED_B_SetHigh();
     
+    // Initialization MESA-AVR-Extension
+    PCF8574_Init();
+    DS3234_Init();
+    
     while(1)
     {
         CycleSync();
@@ -87,8 +94,13 @@ int main(void)
         HBLED_Toggle();
         
         //...programm...
-        LEDS_C = ~TASTEN;
+        LEDS_C = (LEDS_C&~0xf0)|(TASTEN&0xf0); 
         LEDS_D = SCHALTER_RECHTS | (SCHALTER_LINKS&0x0f)<<4;
         RGBLED_G_SetLow();
+        
+        PCF8574_IC3_SetLED1(true);
+        PCF8574_IC3_SetLED2(false);
+        
+        DS3234_GetTime(&mytime);
     }    
 }

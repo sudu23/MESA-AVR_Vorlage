@@ -7,6 +7,17 @@
       <logicalFolder name="MCC Generated Files"
                      displayName="MCC Generated Files"
                      projectFiles="true">
+        <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
+          <itemPath>mcc_generated_files/i2c_host/i2c_host_interface.h</itemPath>
+          <itemPath>mcc_generated_files/i2c_host/i2c_host_event_types.h</itemPath>
+          <itemPath>mcc_generated_files/i2c_host/twi1.h</itemPath>
+          <itemPath>mcc_generated_files/i2c_host/i2c_host_types.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="spi" displayName="spi" projectFiles="true">
+          <itemPath>mcc_generated_files/spi/spi_interface.h</itemPath>
+          <itemPath>mcc_generated_files/spi/spi1.h</itemPath>
+          <itemPath>mcc_generated_files/spi/spi_interrupt_types.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="system" displayName="system" projectFiles="true">
           <logicalFolder name="utils" displayName="utils" projectFiles="true">
             <logicalFolder name="assembler" displayName="assembler" projectFiles="true">
@@ -37,6 +48,8 @@
       </logicalFolder>
       <itemPath>cyclesync.h</itemPath>
       <itemPath>printf.h</itemPath>
+      <itemPath>PCF8574.h</itemPath>
+      <itemPath>DS3234.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -54,6 +67,16 @@
       <logicalFolder name="MCC Generated Files"
                      displayName="MCC Generated Files"
                      projectFiles="true">
+        <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/i2c_host/src/twi1.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="spi" displayName="spi" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/spi/src/spi1.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
         <logicalFolder name="system" displayName="system" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/system/src/pins.c</itemPath>
@@ -73,6 +96,8 @@
       <itemPath>main.c</itemPath>
       <itemPath>cyclesync.c</itemPath>
       <itemPath>printf.c</itemPath>
+      <itemPath>PCF8574.c</itemPath>
+      <itemPath>DS3234.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
