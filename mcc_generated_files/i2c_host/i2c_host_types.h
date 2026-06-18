@@ -3,13 +3,13 @@
  *
  * @file i2c_host_types.h
  *
- * @ingroup i2c_host_interrupt
+ * @defgroup i2c_host_types I2C_HOST_TYPES
  *
  * @brief This header file provides helper structures for the implementation of the I2C host driver.
  *
- * @version TWI1 Driver Version 2.1.4
+ * @version I2C Driver Version 2.1.5
  * 
- * @version TWI1 Package Version 8.2.0
+ * @version I2C Package Version 8.2.1
  */
 
 /*
@@ -37,7 +37,7 @@
 #define	I2C_HOST_TYPES_H
 
 /**
- * @ingroup i2c_host_interrupt
+ * @ingroup i2c_host_types
  * @typedef enum i2c_host_error_t
  * @brief Enumeration for the possible errors in the I2C host driver.
  */ 
@@ -50,7 +50,7 @@ typedef enum
 }i2c_host_error_t;
 
 /**
- * @ingroup i2c_host_interrupt
+ * @ingroup i2c_host_types
  * @struct i2c_transfer_setup structure
  * @brief Structure defining I2C clock configuration.
  */

@@ -7,9 +7,9 @@
  *
  * @brief This file contains the API implementation for TWI1 driver.
  *
- * @version TWI1 Driver Version 2.1.4
+ * @version TWI1 Driver Version 2.1.5
  * 
- * @version TWI1 Package Version 8.2.0
+ * @version TWI1 Package Version 8.2.1
  */
 
 /*
@@ -65,7 +65,7 @@ static i2c_event_states_t I2C_EVENT_RESET(void);
 
 static inline void TWI1_CommandUpdate(TWI_MCMD_t cmd);
 static void (*TWI1_Callback)(void);
-volatile i2c_event_status_t twi1_Status = {0};
+static volatile i2c_event_status_t twi1_Status = {0};
 
 const i2c_host_interface_t I2C1_Host = 
 {
@@ -81,7 +81,8 @@ const i2c_host_interface_t I2C1_Host =
     .Tasks = NULL
 };
 
-const twi1eventHandler twi1_eventTable[] = 
+typedef i2c_event_states_t (*twi1eventHandler)(void);
+static const twi1eventHandler twi1_eventTable[] = 
 {
     I2C_EVENT_IDLE,
     I2C_EVENT_SEND_RD_ADDR,
@@ -101,28 +102,28 @@ void TWI1_Initialize(void)
     TWI1.MCTRLA &= ~(1 << TWI_ENABLE_bp);
 
     // FMPEN OFF; INPUTLVL I2C; SDAHOLD OFF; SDASETUP 4CYC; 
-    TWI1.CTRLA = 0x0;
+    TWI1.CTRLA = (uint8_t)0x0;
 
     // Debug Run
-    TWI1.DBGCTRL = 0x0;
+    TWI1.DBGCTRL = (uint8_t)0x0;
 
     // Host Baud Rate Control
     TWI1.MBAUD = (uint8_t)TWI1_BAUD(104166, 0.1);
 
     // Host Address
-    TWI1.MADDR = 0x0;
+    TWI1.MADDR = (uint8_t)0x0;
 
     // Host Data
-    TWI1.MDATA = 0x0;
+    TWI1.MDATA = (uint8_t)0x0;
    
     // ARBLOST disabled; BUSERR disabled; BUSSTATE UNKNOWN; CLKHOLD disabled; RIF disabled; WIF disabled; 
-    TWI1.MSTATUS = 0x0;
+    TWI1.MSTATUS = (uint8_t)0x0;
 
     // ACKACT ACK; FLUSH disabled; MCMD NOACT; 
-    TWI1.MCTRLB = 0x0;
+    TWI1.MCTRLB = (uint8_t)0x0;
   
     // ENABLE enabled; QCEN disabled; RIEN enabled; SMEN disabled; TIMEOUT DISABLED; WIEN enabled; 
-    TWI1.MCTRLA = 0xC1;
+    TWI1.MCTRLA = (uint8_t)0xC1;
 
     // Force bus to go in idle state
     TWI1.MSTATUS = TWI_BUSSTATE_IDLE_gc; 
@@ -133,28 +134,28 @@ void TWI1_Initialize(void)
 void TWI1_Deinitialize(void)
 {
     // FMPEN OFF; INPUTLVL I2C; SDAHOLD OFF; SDASETUP 4CYC; 
-    TWI1.CTRLA = 0x00;
+    TWI1.CTRLA = (uint8_t)0x00;
     
     // Debug Run
-    TWI1.DBGCTRL = 0x00;
+    TWI1.DBGCTRL = (uint8_t)0x00;
     
     // Host Baud Rate Control
     TWI1.MBAUD = (uint8_t)TWI1_BAUD(104166, 0.1);
     
     // ENABLE enabled; QCEN disabled; RIEN enabled; SMEN disabled; TIMEOUT DISABLED; WIEN enabled; 
-    TWI1.MCTRLA = 0x00;
+    TWI1.MCTRLA = (uint8_t)0x00;
     
     // ARBLOST disabled; BUSERR disabled; BUSSTATE UNKNOWN; CLKHOLD disabled; RIF disabled; WIF disabled; 
-    TWI1.MSTATUS = 0x00;
+    TWI1.MSTATUS = (uint8_t)0x00;
 
     // Host Address
-    TWI1.MADDR = 0x00;
+    TWI1.MADDR = (uint8_t)0x00;
     
     // ACKACT ACK; FLUSH disabled; MCMD NOACT; 
-    TWI1.MCTRLB = 0x00;
+    TWI1.MCTRLB = (uint8_t)0x00;
     
     // Host Data
-    TWI1.MDATA = 0x00;
+    TWI1.MDATA = (uint8_t)0x00;
 
     TWI1.MCTRLA &= ~(1 << TWI_ENABLE_bp);
     // Force bus to go in idle state
@@ -174,7 +175,7 @@ bool TWI1_Write(uint16_t address, uint8_t *data, size_t dataLength)
         twi1_Status.writePtr = data;
         twi1_Status.writeLength = dataLength;
         twi1_Status.readPtr = NULL;
-        twi1_Status.readLength = 0;
+        twi1_Status.readLength = (uint16_t)0;
         twi1_Status.errorState = I2C_ERROR_NONE;
         TWI1_WriteStart();
         retStatus = true;
@@ -195,7 +196,7 @@ bool TWI1_Read(uint16_t address, uint8_t *data, size_t dataLength)
         twi1_Status.readPtr = data;
         twi1_Status.readLength = dataLength;
         twi1_Status.writePtr = NULL;
-        twi1_Status.writeLength = 0;
+        twi1_Status.writeLength = (uint16_t)0;
         twi1_Status.errorState = I2C_ERROR_NONE;
         TWI1_ReadStart();
         retStatus = true;
@@ -249,12 +250,12 @@ void TWI1_CallbackRegister(void (*callbackHandler)(void))
 static void TWI1_Close(void)
 {
     twi1_Status.busy = false;
-    twi1_Status.address = 0xFF;
+    twi1_Status.address = (uint16_t)0xFF;
     twi1_Status.writePtr = NULL;
     twi1_Status.readPtr = NULL;
     twi1_Status.state = I2C_STATE_IDLE;
     // Clear interrupt status
-    TWI1.MSTATUS = (TWI_RIF_bm | TWI_WIF_bm);
+    TWI1.MSTATUS = (uint8_t)(TWI_RIF_bm | TWI_WIF_bm);
     TWI1.MSTATUS = TWI_BUSSTATE_IDLE_gc;
 }
 
@@ -282,7 +283,7 @@ static void TWI1_ErrorEventHandler(void)
         twi1_Status.errorState = I2C_ERROR_BUS_COLLISION;
         
         // Clear the error flags
-        TWI1.MSTATUS = (TWI_BUSERR_bm | TWI_ARBLOST_bm);
+        TWI1.MSTATUS = (uint8_t)(TWI_BUSERR_bm | TWI_ARBLOST_bm);
     }
     // Check if address NAK
     else if ((TWI1.MADDR) && (TWI1.MSTATUS & TWI_RXACK_bm))
@@ -410,7 +411,7 @@ static i2c_event_states_t I2C_EVENT_ERROR(void)
     // Clear bus collision status flag
     i2c_event_states_t retEventState = I2C_STATE_ERROR;
     // Clear interrupt status
-    TWI1.MSTATUS = (TWI_RIF_bm | TWI_WIF_bm);
+    TWI1.MSTATUS = (uint8_t)(TWI_RIF_bm | TWI_WIF_bm);
     retEventState = I2C_EVENT_RESET();
     
     return retEventState;
@@ -438,7 +439,7 @@ static i2c_event_states_t I2C_EVENT_RESET(void)
 
 static inline void TWI1_CommandUpdate(TWI_MCMD_t cmd)
 {
-    TWI1.MCTRLB = (TWI1.MCTRLB & ~TWI_MCMD_gm) | cmd;  
+    TWI1.MCTRLB = ((TWI1.MCTRLB & (uint8_t)(~TWI_MCMD_gm)) | (uint8_t)cmd);  
 }
 
 /** 
@@ -467,11 +468,11 @@ static inline void TWI1_CommandUpdate(TWI_MCMD_t cmd)
  */
 ISR(TWI1_TWIM_vect)
 {/* cppcheck-suppress misra-c2012-5.5 */
-   if (0U != (TWI1.MSTATUS & (TWI_RXACK_bm | TWI_BUSERR_bm | TWI_ARBLOST_bm)))
+   if ((uint8_t)0U != (TWI1.MSTATUS & (uint8_t)(TWI_RXACK_bm | TWI_BUSERR_bm | TWI_ARBLOST_bm)))
    {
     TWI1_ErrorEventHandler();
    }
-   else if (0U != (TWI1.MSTATUS & (TWI_RIF_bm | TWI_WIF_bm | TWI_CLKHOLD_bm)))
+   else if ((uint8_t)0U != (TWI1.MSTATUS & (uint8_t)(TWI_RIF_bm | TWI_WIF_bm | TWI_CLKHOLD_bm)))
    {
     TWI1_EventHandler();
    }

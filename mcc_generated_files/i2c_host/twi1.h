@@ -7,9 +7,9 @@
  *
  * @brief This header file includes API prototypes and various data types for the TWI1 host driver.
  *
- * @version TWI1 Driver Version 2.1.4
+ * @version TWI1 Driver Version 2.1.5
  *
- * @version TWI1 Package Version 8.2.0
+ * @version TWI1 Package Version 8.2.1
  */
 
 /*

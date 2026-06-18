@@ -13,7 +13,7 @@
 */
 
 /*
-© [2026] Microchip Technology Inc. and its subsidiaries.
+ï¿½ [2026] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -66,26 +66,39 @@
 int main(void)
 {
     //Local Variables
-    ds3234_time_t mytime;
+    ds3234_time_t mytime = {0}; // Alle Felder mit 0 initialisieren
+    uint8_t tempdata;
+    float temperature;
+    
+    mytime.year = 2026;
+    mytime.month = 6;
+    mytime.day = 11;
+    mytime.hour = 00;
+    mytime.minute = 00;
+    mytime.second = 0;
     
     // Initialization microcontroller
     SYSTEM_Initialize();
     
     // Initialization cycle system with TIC-parameter 
-    CycleSyncInit(100);
+    CycleSyncInit(1000);
     
     //set the output stream and show welcome message
     stdout = &mystdout;
     printf("MESA-AVR\n");
-
+    
     // Initialization gpio
     RGBLED_R_SetHigh();
     RGBLED_G_SetHigh();
     RGBLED_B_SetHigh();
     
     // Initialization MESA-AVR-Extension
-    PCF8574_Init();
-    DS3234_Init();
+    //PCF8574_Init();
+    if(!DS3234_Init()){
+        printf("DS3234 error\n");
+        while(1){;}
+    }
+    DS3234_SetTime(&mytime);
     
     while(1)
     {
@@ -98,9 +111,10 @@ int main(void)
         LEDS_D = SCHALTER_RECHTS | (SCHALTER_LINKS&0x0f)<<4;
         RGBLED_G_SetLow();
         
-        PCF8574_IC3_SetLED1(true);
-        PCF8574_IC3_SetLED2(false);
-        
         DS3234_GetTime(&mytime);
+        //DS3234_GetTemperature(&temperature);
+        
+        printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
+        //printf("Temp: %f\n", temperature);
     }    
 }
