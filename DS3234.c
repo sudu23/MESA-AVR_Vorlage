@@ -50,15 +50,15 @@ static uint8_t DS3234_ReadRegister(uint8_t reg) {
     uint8_t data = 0;
     
     DS3234_CS_SELECT();
-    _delay_us(2); // Dem CS-Pin Zeit zum Einschwingen geben
+    //_delay_us(2); // Dem CS-Pin Zeit zum Einschwingen geben
     
     SPI1_ByteExchange(reg & 0x7F);  // Bit 7 auf 0 fuer Lesen
-    DS3234_WaitForSPI();            // Zwingend auf Ende der ISR warten!
+    //DS3234_WaitForSPI();            // Zwingend auf Ende der ISR warten!
     
     data = SPI1_ByteExchange(0x00); // Dummy senden, um Daten zu lesen
-    DS3234_WaitForSPI();            // Zwingend auf Ende der ISR warten!
+    //DS3234_WaitForSPI();            // Zwingend auf Ende der ISR warten!
     
-    _delay_us(2);
+    //_delay_us(2);
     DS3234_CS_DESELECT();
 
     return data;
@@ -66,22 +66,22 @@ static uint8_t DS3234_ReadRegister(uint8_t reg) {
 
 static void DS3234_WriteRegister(uint8_t reg, uint8_t val) {
     DS3234_CS_SELECT();
-    _delay_us(2);
+    //_delay_us(2);
     
     SPI1_ByteExchange(reg | 0x80);  // Bit 7 auf 1 fuer Schreiben
-    DS3234_WaitForSPI();            // Zwingend warten!
+    //DS3234_WaitForSPI();            // Zwingend warten!
     
     SPI1_ByteExchange(val);
-    DS3234_WaitForSPI();            // Zwingend warten!
+    //DS3234_WaitForSPI();            // Zwingend warten!
     
-    _delay_us(2);
+    //_delay_us(2);
     DS3234_CS_DESELECT();
 }
 
 bool DS3234_Init(void) {
     // 1. PORTC gezielt fuer SPI1-Betrieb umschreiben (Einkommentiert und erweitert!)
-    PORTC.DIRSET = PIN0_bm | PIN2_bm | PIN3_bm; // PC0 (MOSI), PC2 (SCK), PC3 (CS) -> Ausgang
-    PORTC.DIRCLR = PIN1_bm;                     // PC1 (MISO) -> Eingang
+    //PORTC.DIRSET = PIN0_bm | PIN2_bm | PIN3_bm; // PC0 (MOSI), PC2 (SCK), PC3 (CS) -> Ausgang
+    //PORTC.DIRCLR = PIN1_bm;                     // PC1 (MISO) -> Eingang
     
     DS3234_CS_INIT();
     DS3234_CS_DESELECT(); // Direkt in den inaktiven Zustand (High) versetzen
@@ -95,9 +95,9 @@ bool DS3234_Init(void) {
     
     // 2. Control Register auslesen und einstellen
     uint8_t control_reg = DS3234_ReadRegister(REG_CONTROL);
-    control_reg &= ~(1 << 7); // EOSC bit loeschen = Oszillator an im Batteriebetrieb
-    control_reg |= (1 << 2);  // INTCN bit setzen = nINT Pin feuert Alarme
-    control_reg |= (1 << 5);  // CONV bit setzen = Convert Temperatur
+    control_reg &= ~(1 << 7); // EOSC bit loeschen = Oszillator im Batteriebetrieb an
+    //control_reg |= (1 << 2);  // INTCN bit setzen = nINT Pin feuert Alarme
+    //control_reg |= (1 << 5);  // CONV bit setzen = Convert Temperatur
     DS3234_WriteRegister(REG_CONTROL, control_reg);
     
     // Kontrolllesung zur Absicherung
@@ -129,12 +129,12 @@ bool DS3234_SetTime(const ds3234_time_t *time) {
     write_buffer[7] = bin2bcd((uint8_t)(time->year % 100));
      
     DS3234_CS_SELECT();
-    _delay_us(2);
+    //_delay_us(2);
     
     SPI1_BufferWrite(write_buffer, sizeof(write_buffer));
     DS3234_WaitForSPI();
     
-    _delay_us(2);
+    //_delay_us(2);
     DS3234_CS_DESELECT();
     return true;
 }
@@ -146,12 +146,12 @@ bool DS3234_GetTime(ds3234_time_t *time) {
     uint8_t rx_buffer[8] = { 0 };
     
     DS3234_CS_SELECT();
-    _delay_us(2);
+   // _delay_us(2);
     
     SPI1_Transfer(tx_buffer, rx_buffer, sizeof(tx_buffer));
     DS3234_WaitForSPI();
     
-    _delay_us(2);
+    //_delay_us(2);
     DS3234_CS_DESELECT();
 
     // rx_buffer[0] enthaelt nur Muell von der Adressphase, Daten starten ab Index 1
@@ -173,12 +173,12 @@ bool DS3234_GetTemperature(float *temperature) {
     uint8_t rx_buffer[3] = { 0 };
      
     DS3234_CS_SELECT();
-    _delay_us(2);
+    //_delay_us(2);
     
     SPI1_Transfer(tx_buffer, rx_buffer, sizeof(tx_buffer));
     DS3234_WaitForSPI();
     
-    _delay_us(2);
+    //_delay_us(2);
     DS3234_CS_DESELECT();
     
     int8_t msb = (int8_t)rx_buffer[1];
