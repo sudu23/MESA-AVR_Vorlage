@@ -70,12 +70,14 @@ int main(void)
     uint8_t tempdata;
     float temperature;
     
-    /*mytime.year = 2026;
+    /*
+    mytime.year = 2026;
     mytime.month = 6;
-    mytime.day = 11;
-    mytime.hour = 17;
-    mytime.minute = 10;
-    mytime.second = 0;*/
+    mytime.day = 19;
+    mytime.hour = 11;
+    mytime.minute = 25;
+    mytime.second = 0;
+    */
     
     // Initialization microcontroller
     SYSTEM_Initialize();
@@ -92,13 +94,18 @@ int main(void)
     RGBLED_G_SetHigh();
     RGBLED_B_SetHigh();
     
-    // Initialization MESA-AVR-Extension
+    // Initialization MESA-AVR-Extension Port-Expander (PCF8574)
     //PCF8574_Init();
+    
+    // Initialization MESA-AVR-Extension RTC (DS3234)
     if(!DS3234_Init()){
         printf("DS3234 error\n");
         while(1){;}
     }
     //DS3234_SetTime(&mytime);
+    DS3234_GetTime(&mytime);
+    printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
+    printf("Datum: %u.%u.%u\n", (unsigned int)mytime.day, mytime.month, mytime.year);
     
     while(1)
     {
@@ -107,14 +114,11 @@ int main(void)
         HBLED_Toggle();
         
         //...programm...
-        LEDS_C = (LEDS_C&~0xf0)|(TASTEN&0xf0); 
+        //LEDS_C = (LEDS_C&~0xf0)|(TASTEN&0xf0); 
         LEDS_D = SCHALTER_RECHTS | (SCHALTER_LINKS&0x0f)<<4;
         RGBLED_G_SetLow();
-        
+
         DS3234_GetTime(&mytime);
-        //DS3234_GetTemperature(&temperature);
-        
-        printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
-        //printf("Temp: %f\n", temperature);
+        printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);        
     }    
 }
