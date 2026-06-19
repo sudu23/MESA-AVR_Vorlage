@@ -69,7 +69,7 @@ static spi_descriptor_t spi1_descriptor =
 
 static const spi_configuration_t spi1_configuration[] = 
 {
-    { 0x35, 0xc5 },
+    { 0x21, 0xc5 },
     { 0x20, 0xC4 }
 };
 

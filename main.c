@@ -70,12 +70,12 @@ int main(void)
     uint8_t tempdata;
     float temperature;
     
-    mytime.year = 2026;
+    /*mytime.year = 2026;
     mytime.month = 6;
     mytime.day = 11;
-    mytime.hour = 00;
-    mytime.minute = 00;
-    mytime.second = 0;
+    mytime.hour = 17;
+    mytime.minute = 10;
+    mytime.second = 0;*/
     
     // Initialization microcontroller
     SYSTEM_Initialize();
@@ -98,7 +98,7 @@ int main(void)
         printf("DS3234 error\n");
         while(1){;}
     }
-    DS3234_SetTime(&mytime);
+    //DS3234_SetTime(&mytime);
     
     while(1)
     {

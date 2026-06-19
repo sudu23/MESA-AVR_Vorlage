@@ -6,7 +6,6 @@
  */
 
 #include <util/delay.h>
-
 #include "mcc_generated_files/system/system.h"
 #include "DS3234.h"
 
@@ -46,16 +45,20 @@ static void DS3234_WaitForSPI(void) {
     }
 }
 
+// Niedrigwertige SPI-Hilfsfunktionen mit korrigiertem ISR-Warte-Timing
 static uint8_t DS3234_ReadRegister(uint8_t reg) {
     uint8_t data = 0;
     
     DS3234_CS_SELECT();
-    _delay_us(1);
+    _delay_us(2); // Dem CS-Pin Zeit zum Einschwingen geben
     
-    SPI1_ByteExchange(reg & 0x7F);
-    data = SPI1_ByteExchange(0x00); 
-
-    _delay_us(1);
+    SPI1_ByteExchange(reg & 0x7F);  // Bit 7 auf 0 fuer Lesen
+    DS3234_WaitForSPI();            // Zwingend auf Ende der ISR warten!
+    
+    data = SPI1_ByteExchange(0x00); // Dummy senden, um Daten zu lesen
+    DS3234_WaitForSPI();            // Zwingend auf Ende der ISR warten!
+    
+    _delay_us(2);
     DS3234_CS_DESELECT();
 
     return data;
@@ -63,44 +66,41 @@ static uint8_t DS3234_ReadRegister(uint8_t reg) {
 
 static void DS3234_WriteRegister(uint8_t reg, uint8_t val) {
     DS3234_CS_SELECT();
-    _delay_us(1);
+    _delay_us(2);
     
     SPI1_ByteExchange(reg | 0x80);  // Bit 7 auf 1 fuer Schreiben
-    SPI1_ByteExchange(val);
+    DS3234_WaitForSPI();            // Zwingend warten!
     
-    _delay_us(1);
+    SPI1_ByteExchange(val);
+    DS3234_WaitForSPI();            // Zwingend warten!
+    
+    _delay_us(2);
     DS3234_CS_DESELECT();
 }
 
 bool DS3234_Init(void) {
-    // 1. PORTC gezielt fuer SPI1-Betrieb umschreiben
-    // PC0 (MOSI) -> Ausgang
-    // PC1 (MISO) -> Eingang
-    // PC2 (SCK)  -> Ausgang
-    // PC3 (CS)   -> Ausgang (und direkt auf HIGH legen)
-    //PORTC.DIRSET = PIN0_bm | PIN2_bm | PIN3_bm;
-    //PORTC.DIRCLR = PIN1_bm;
+    // 1. PORTC gezielt fuer SPI1-Betrieb umschreiben (Einkommentiert und erweitert!)
+    PORTC.DIRSET = PIN0_bm | PIN2_bm | PIN3_bm; // PC0 (MOSI), PC2 (SCK), PC3 (CS) -> Ausgang
+    PORTC.DIRCLR = PIN1_bm;                     // PC1 (MISO) -> Eingang
+    
     DS3234_CS_INIT();
-    if(!SPI1_Open(SPI1_DEFAULT)){
+    DS3234_CS_DESELECT(); // Direkt in den inaktiven Zustand (High) versetzen
+    
+    // SPI-Konfiguration laden
+    if(!SPI1_Open(HOST_CONFIG)){
         return false;
     }
     
-    // Default-Zustand (High = Deselect) fuer PC3 einrichten
-    DS3234_CS_DESELECT();
+    _delay_ms(5); // Kurze Stabilisierungszeit nach dem Bus-Schnittstellen-Einschalten
     
-    _delay_ms(1);
-    
-    // 2. Den MCC SPI Treiber initialisieren
-    //SPI1_Initialize();
-    
-    // 3. Control Register auslesen und einstellen
-    // Sicherstellen, dass der Oszillator laeuft (EOSC = 0) und
-    // den nINT/SQW Pin auf Interrupt-Betrieb stellen (INTCN = 1)
+    // 2. Control Register auslesen und einstellen
     uint8_t control_reg = DS3234_ReadRegister(REG_CONTROL);
     control_reg &= ~(1 << 7); // EOSC bit loeschen = Oszillator an im Batteriebetrieb
     control_reg |= (1 << 2);  // INTCN bit setzen = nINT Pin feuert Alarme
     control_reg |= (1 << 5);  // CONV bit setzen = Convert Temperatur
     DS3234_WriteRegister(REG_CONTROL, control_reg);
+    
+    // Kontrolllesung zur Absicherung
     if(control_reg != DS3234_ReadRegister(REG_CONTROL)){
         return false;
     }
@@ -129,14 +129,12 @@ bool DS3234_SetTime(const ds3234_time_t *time) {
     write_buffer[7] = bin2bcd((uint8_t)(time->year % 100));
      
     DS3234_CS_SELECT();
-    _delay_us(1);
-    // Nutzt die BufferWrite-Funktion deiner API fuer einen schnellen Burst
-    SPI1_BufferWrite(write_buffer, sizeof(write_buffer));
+    _delay_us(2);
     
-    // Warten, bis die ISR alle Bytes vollstaendig gesendet hat
+    SPI1_BufferWrite(write_buffer, sizeof(write_buffer));
     DS3234_WaitForSPI();
     
-    _delay_us(1);
+    _delay_us(2);
     DS3234_CS_DESELECT();
     return true;
 }
@@ -148,15 +146,14 @@ bool DS3234_GetTime(ds3234_time_t *time) {
     uint8_t rx_buffer[8] = { 0 };
     
     DS3234_CS_SELECT();
-    // SPI1_Transfer sendet die Startadresse und liest parallel die 7 Bytes der Uhrzeit ein
-    SPI1_Transfer(tx_buffer, rx_buffer, sizeof(tx_buffer));
+    _delay_us(2);
     
-    // Warten, bis die ISR den gesamten Buffer gefuellt hat
+    SPI1_Transfer(tx_buffer, rx_buffer, sizeof(tx_buffer));
     DS3234_WaitForSPI();
     
+    _delay_us(2);
     DS3234_CS_DESELECT();
 
-    
     // rx_buffer[0] enthaelt nur Muell von der Adressphase, Daten starten ab Index 1
     time->second      = bcd2bin(rx_buffer[1]);
     time->minute      = bcd2bin(rx_buffer[2]);
@@ -176,21 +173,25 @@ bool DS3234_GetTemperature(float *temperature) {
     uint8_t rx_buffer[3] = { 0 };
      
     DS3234_CS_SELECT();
-    SPI1_Transfer(tx_buffer, rx_buffer, sizeof(tx_buffer));
+    _delay_us(2);
     
-    // Warten auf das Ende der ISR-Uebertragung
+    SPI1_Transfer(tx_buffer, rx_buffer, sizeof(tx_buffer));
     DS3234_WaitForSPI();
     
+    _delay_us(2);
     DS3234_CS_DESELECT();
     
-    // rx_buffer[0] = Dummy waehrend Adressphase
     int8_t msb = (int8_t)rx_buffer[1];
     uint8_t lsb = rx_buffer[2];
     
     float fraction = (float)(lsb >> 6) * 0.25f;
     
-    // Da msb int8_t ist, ergibt -1 + 0.75 korrekt -0.25
-    *temperature = (float)msb + fraction;
+    // Korrektes Vorzeichenhandling fuer negative Temperaturen
+    if (msb < 0) {
+        *temperature = (float)msb - fraction;
+    } else {
+        *temperature = (float)msb + fraction;
+    }
     
     return true;
 }
