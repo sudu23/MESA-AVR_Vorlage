@@ -1,8 +1,7 @@
 /*
  * cyclesync.h
- * Version: 1.1.1
+ * Version: 1.2.0
  *
- * Created: 16.02.2024 14:57:25
  *  Author: bub
  */
 
@@ -15,9 +14,14 @@ typedef struct {
 	int16_t tic;
 	uint8_t status;
 	int16_t timeleft;
+    volatile uint32_t systicks;
 } cyclesyncstruct_t;
 
 uint8_t CycleSyncInit(uint16_t);
 int16_t CycleSync(void);
+
+int16_t GetTimeLeft(void);
+
+uint32_t GetSysTicks(void);
 
 #endif //CYCLESYNC_H
