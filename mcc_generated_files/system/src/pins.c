@@ -36,9 +36,6 @@
 
 static void (*IO_PF1_InterruptHandler)(void);
 static void (*IO_PF0_InterruptHandler)(void);
-static void (*IO_PC1_InterruptHandler)(void);
-static void (*IO_PC0_InterruptHandler)(void);
-static void (*IO_PC2_InterruptHandler)(void);
 static void (*IO_PF3_InterruptHandler)(void);
 static void (*IO_PF2_InterruptHandler)(void);
 static void (*IO_PA0_InterruptHandler)(void);
@@ -59,6 +56,9 @@ static void (*IO_PE2_InterruptHandler)(void);
 static void (*IO_PE3_InterruptHandler)(void);
 static void (*HBLED_InterruptHandler)(void);
 static void (*RGBLED_B_InterruptHandler)(void);
+static void (*IO_PC0_InterruptHandler)(void);
+static void (*IO_PC1_InterruptHandler)(void);
+static void (*IO_PC2_InterruptHandler)(void);
 static void (*IO_PC3_InterruptHandler)(void);
 static void (*IO_PC4_InterruptHandler)(void);
 static void (*IO_PC5_InterruptHandler)(void);
@@ -89,7 +89,7 @@ void PIN_MANAGER_Initialize()
   /* DIR Registers Initialization */
     PORTA.DIR = 0x0;
     PORTB.DIR = 0x30;
-    PORTC.DIR = 0xFD;
+    PORTC.DIR = 0xFF;
     PORTD.DIR = 0xFF;
     PORTE.DIR = 0x0;
     PORTF.DIR = 0x31;
@@ -148,7 +148,7 @@ void PIN_MANAGER_Initialize()
     PORTMUX.ACROUTEA = 0x0;
     PORTMUX.CCLROUTEA = 0x0;
     PORTMUX.EVSYSROUTEA = 0x0;
-    PORTMUX.SPIROUTEA = 0x0;
+    PORTMUX.SPIROUTEA = 0xC;
     PORTMUX.TCAROUTEA = 0x0;
     PORTMUX.TCBROUTEA = 0x0;
     PORTMUX.TCDROUTEA = 0x0;
@@ -160,9 +160,6 @@ void PIN_MANAGER_Initialize()
   // register default ISC callback functions at runtime; use these methods to register a custom function
     IO_PF1_SetInterruptHandler(IO_PF1_DefaultInterruptHandler);
     IO_PF0_SetInterruptHandler(IO_PF0_DefaultInterruptHandler);
-    IO_PC1_SetInterruptHandler(IO_PC1_DefaultInterruptHandler);
-    IO_PC0_SetInterruptHandler(IO_PC0_DefaultInterruptHandler);
-    IO_PC2_SetInterruptHandler(IO_PC2_DefaultInterruptHandler);
     IO_PF3_SetInterruptHandler(IO_PF3_DefaultInterruptHandler);
     IO_PF2_SetInterruptHandler(IO_PF2_DefaultInterruptHandler);
     IO_PA0_SetInterruptHandler(IO_PA0_DefaultInterruptHandler);
@@ -183,6 +180,9 @@ void PIN_MANAGER_Initialize()
     IO_PE3_SetInterruptHandler(IO_PE3_DefaultInterruptHandler);
     HBLED_SetInterruptHandler(HBLED_DefaultInterruptHandler);
     RGBLED_B_SetInterruptHandler(RGBLED_B_DefaultInterruptHandler);
+    IO_PC0_SetInterruptHandler(IO_PC0_DefaultInterruptHandler);
+    IO_PC1_SetInterruptHandler(IO_PC1_DefaultInterruptHandler);
+    IO_PC2_SetInterruptHandler(IO_PC2_DefaultInterruptHandler);
     IO_PC3_SetInterruptHandler(IO_PC3_DefaultInterruptHandler);
     IO_PC4_SetInterruptHandler(IO_PC4_DefaultInterruptHandler);
     IO_PC5_SetInterruptHandler(IO_PC5_DefaultInterruptHandler);
@@ -225,45 +225,6 @@ void IO_PF0_DefaultInterruptHandler(void)
 {
     // add your IO_PF0 interrupt custom code
     // or set custom function using IO_PF0_SetInterruptHandler()
-}
-/**
-  Allows selecting an interrupt handler for IO_PC1 at application runtime
-*/
-void IO_PC1_SetInterruptHandler(void (* interruptHandler)(void)) 
-{
-    IO_PC1_InterruptHandler = interruptHandler;
-}
-
-void IO_PC1_DefaultInterruptHandler(void)
-{
-    // add your IO_PC1 interrupt custom code
-    // or set custom function using IO_PC1_SetInterruptHandler()
-}
-/**
-  Allows selecting an interrupt handler for IO_PC0 at application runtime
-*/
-void IO_PC0_SetInterruptHandler(void (* interruptHandler)(void)) 
-{
-    IO_PC0_InterruptHandler = interruptHandler;
-}
-
-void IO_PC0_DefaultInterruptHandler(void)
-{
-    // add your IO_PC0 interrupt custom code
-    // or set custom function using IO_PC0_SetInterruptHandler()
-}
-/**
-  Allows selecting an interrupt handler for IO_PC2 at application runtime
-*/
-void IO_PC2_SetInterruptHandler(void (* interruptHandler)(void)) 
-{
-    IO_PC2_InterruptHandler = interruptHandler;
-}
-
-void IO_PC2_DefaultInterruptHandler(void)
-{
-    // add your IO_PC2 interrupt custom code
-    // or set custom function using IO_PC2_SetInterruptHandler()
 }
 /**
   Allows selecting an interrupt handler for IO_PF3 at application runtime
@@ -524,6 +485,45 @@ void RGBLED_B_DefaultInterruptHandler(void)
 {
     // add your RGBLED_B interrupt custom code
     // or set custom function using RGBLED_B_SetInterruptHandler()
+}
+/**
+  Allows selecting an interrupt handler for IO_PC0 at application runtime
+*/
+void IO_PC0_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    IO_PC0_InterruptHandler = interruptHandler;
+}
+
+void IO_PC0_DefaultInterruptHandler(void)
+{
+    // add your IO_PC0 interrupt custom code
+    // or set custom function using IO_PC0_SetInterruptHandler()
+}
+/**
+  Allows selecting an interrupt handler for IO_PC1 at application runtime
+*/
+void IO_PC1_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    IO_PC1_InterruptHandler = interruptHandler;
+}
+
+void IO_PC1_DefaultInterruptHandler(void)
+{
+    // add your IO_PC1 interrupt custom code
+    // or set custom function using IO_PC1_SetInterruptHandler()
+}
+/**
+  Allows selecting an interrupt handler for IO_PC2 at application runtime
+*/
+void IO_PC2_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    IO_PC2_InterruptHandler = interruptHandler;
+}
+
+void IO_PC2_DefaultInterruptHandler(void)
+{
+    // add your IO_PC2 interrupt custom code
+    // or set custom function using IO_PC2_SetInterruptHandler()
 }
 /**
   Allows selecting an interrupt handler for IO_PC3 at application runtime
@@ -793,13 +793,13 @@ ISR(PORTB_PORT_vect)
 ISR(PORTC_PORT_vect)
 { 
     // Call the interrupt handler for the callback registered at runtime
-    if(VPORTC.INTFLAGS & PORT_INT1_bm)
-    {
-       IO_PC1_InterruptHandler(); 
-    }
     if(VPORTC.INTFLAGS & PORT_INT0_bm)
     {
        IO_PC0_InterruptHandler(); 
+    }
+    if(VPORTC.INTFLAGS & PORT_INT1_bm)
+    {
+       IO_PC1_InterruptHandler(); 
     }
     if(VPORTC.INTFLAGS & PORT_INT2_bm)
     {
