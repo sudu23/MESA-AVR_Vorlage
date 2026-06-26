@@ -9,9 +9,9 @@
   *
   * @brief This file contains the driver code for CLKCTRL module.
   *
-  * version CLKCTRL Driver Version 1.1.4
+  * version CLKCTRL Driver Version 1.2.0
   *
-  * @version Package Version 2.0.10
+  * @version Package Version 2.2.0
 */
 /*
 © [2026] Microchip Technology Inc. and its subsidiaries.
@@ -39,45 +39,56 @@
 
 void CLOCK_Initialize(void)
 {
-    ccp_write_io((void*)&(CLKCTRL.MCLKCTRLA),(0 << CLKCTRL_CLKOUT_bp)   // CLKOUT disabled
-            | CLKCTRL_CLKSEL_OSCHF_gc   // CLKSEL Internal high-frequency oscillator
+    ccp_write_io((void*)&(CLKCTRL.MCLKCTRLA),(uint8_t)(0U << CLKCTRL_CLKOUT_bp)   // CLKOUT disabled
+            | (uint8_t)CLKCTRL_CLKSEL_OSCHF_gc   // CLKSEL Internal high-frequency oscillator
             );
-    ccp_write_io((void*)&(CLKCTRL.MCLKCTRLB),CLKCTRL_PDIV_2X_gc   // PDIV 2X
-            | (0 << CLKCTRL_PEN_bp)   // PEN disabled
+	
+    ccp_write_io((void*)&(CLKCTRL.MCLKCTRLB),(uint8_t)CLKCTRL_PDIV_2X_gc   // PDIV 2X
+            | (uint8_t)(0U << CLKCTRL_PEN_bp)   // PEN disabled
             );
-    ccp_write_io((void*)&(CLKCTRL.OSC32KCTRLA),(0 << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
+	
+    ccp_write_io((void*)&(CLKCTRL.OSC32KCTRLA),(uint8_t)(0U << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
             );
-    ccp_write_io((void*)&(CLKCTRL.OSCHFCTRLA),(0 << CLKCTRL_AUTOTUNE_bp)   // AUTOTUNE disabled
-            | CLKCTRL_FRQSEL_4M_gc   // FRQSEL 4 MHz system clock (default)
-            | (0 << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
+	
+    ccp_write_io((void*)&(CLKCTRL.OSCHFCTRLA),(uint8_t)(0U << CLKCTRL_AUTOTUNE_bp)   // AUTOTUNE disabled
+            | (uint8_t)CLKCTRL_FRQSEL_4M_gc   // FRQSEL 4 MHz system clock (default)
+            | (uint8_t)(0U << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
             );
-    ccp_write_io((void*)&(CLKCTRL.OSCHFTUNE),0x0   // TUNE 0x0
+	
+    ccp_write_io((void*)&(CLKCTRL.OSCHFTUNE),(uint8_t)0x0   // TUNE 0x0
             );
-    ccp_write_io((void*)&(CLKCTRL.PLLCTRLA),CLKCTRL_MULFAC_DISABLE_gc   // MULFAC PLL is disabled
-            | (0 << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
-            | CLKCTRL_SOURCE_OSCHF_gc   // SOURCE OSCHF
+	
+    ccp_write_io((void*)&(CLKCTRL.PLLCTRLA),(uint8_t)CLKCTRL_MULFAC_DISABLE_gc   // MULFAC PLL is disabled
+            | (uint8_t)(0U << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
+            | (uint8_t)CLKCTRL_SOURCE_OSCHF_gc   // SOURCE OSCHF
             );
-    ccp_write_io((void*)&(CLKCTRL.XOSC32KCTRLA),CLKCTRL_CSUT_1K_gc   // CSUT 1k cycles
-            | (0 << CLKCTRL_ENABLE_bp)   // ENABLE disabled
-            | (0 << CLKCTRL_LPMODE_bp)   // LPMODE disabled
-            | (0 << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
-            | (0 << CLKCTRL_SEL_bp)   // SEL disabled
+	
+    ccp_write_io((void*)&(CLKCTRL.XOSC32KCTRLA),(uint8_t)CLKCTRL_CSUT_1K_gc   // CSUT 1k cycles
+            | (uint8_t)(0U << CLKCTRL_ENABLE_bp)   // ENABLE disabled
+            | (uint8_t)(0U << CLKCTRL_LPMODE_bp)   // LPMODE disabled
+            | (uint8_t)(0U << CLKCTRL_RUNSTDBY_bp)   // RUNSTDBY disabled
+            | (uint8_t)(0U << CLKCTRL_SEL_bp)   // SEL disabled
             );
-    ccp_write_io((void*)&(CLKCTRL.MCLKCTRLC),(0 << CLKCTRL_CFDEN_bp)   // CFDEN disabled
-            | CLKCTRL_CFDSRC_CLKMAIN_gc   // CFDSRC CLKMAIN
-            | (0 << CLKCTRL_CFDTST_bp)   // CFDTST disabled
+	
+    ccp_write_io((void*)&(CLKCTRL.MCLKCTRLC),(uint8_t)(0U << CLKCTRL_CFDEN_bp)   // CFDEN disabled
+            | (uint8_t)CLKCTRL_CFDSRC_CLKMAIN_gc   // CFDSRC CLKMAIN
+            | (uint8_t)(0U << CLKCTRL_CFDTST_bp)   // CFDTST disabled
             );
-    ccp_write_io((void*)&(CLKCTRL.MCLKINTCTRL),(0 << CLKCTRL_CFD_bp)   // CFD disabled
-            | CLKCTRL_INTTYPE_INT_gc   // INTTYPE INT
+	
+    ccp_write_io((void*)&(CLKCTRL.MCLKINTCTRL),(uint8_t)(0U << CLKCTRL_CFD_bp)   // CFD disabled
+            | (uint8_t)CLKCTRL_INTTYPE_INT_gc   // INTTYPE INT
             );
-    ccp_write_io((void*)&(CLKCTRL.MCLKINTFLAGS),(0 << CLKCTRL_CFD_bp)   // CFD disabled
+	
+    ccp_write_io((void*)&(CLKCTRL.MCLKINTFLAGS),(uint8_t)(0U << CLKCTRL_CFD_bp)   // CFD disabled
             );
-    ccp_write_io((void*)&(CLKCTRL.XOSCHFCTRLA),CLKCTRL_CSUTHF_256_gc   // CSUTHF 256
-            | (0 << CLKCTRL_ENABLE_bp)   // ENABLE disabled
-            | CLKCTRL_FRQRANGE_8M_gc   // FRQRANGE 8M
-            | (0 << CLKCTRL_RUNSTBY_bp)   // RUNSTBY disabled
-            | CLKCTRL_SELHF_XTAL_gc   // SELHF XTAL
+	
+    ccp_write_io((void*)&(CLKCTRL.XOSCHFCTRLA),(uint8_t)CLKCTRL_CSUTHF_256_gc   // CSUTHF 256
+            | (uint8_t)(0U << CLKCTRL_ENABLE_bp)   // ENABLE disabled
+            | (uint8_t)CLKCTRL_FRQRANGE_8M_gc   // FRQRANGE 8M
+            | (uint8_t)(0U << CLKCTRL_RUNSTBY_bp)   // RUNSTBY disabled
+            | (uint8_t)CLKCTRL_SELHF_XTAL_gc   // SELHF XTAL
             );
+	
 
     // System clock stability check by polling the status register.
     while(!(CLKCTRL.MCLKSTATUS & CLKCTRL_OSCHFS_bm))
@@ -89,13 +100,38 @@ void CLOCK_Initialize(void)
 void CFD_Enable(CLKCTRL_CFDSRC_t cfd_source)
 {
     /* Enable Clock Failure Detection on main clock */
-    ccp_write_io((uint8_t *) & CLKCTRL.MCLKCTRLC, cfd_source | CLKCTRL_CFDEN_bm);
+    ccp_write_io((uint8_t *) & CLKCTRL.MCLKCTRLC, (uint8_t)((uint8_t)cfd_source | CLKCTRL_CFDEN_bm));
 }
 
 void CFD_Disable(void)
 {
     /* Disable Clock Failure Detection on main clock */
-    ccp_write_io((uint8_t *) & CLKCTRL.MCLKCTRLC, CLKCTRL.MCLKCTRLC & ~CLKCTRL_CFDEN_bm);
+    ccp_write_io((uint8_t *) & CLKCTRL.MCLKCTRLC, (uint8_t)(CLKCTRL.MCLKCTRLC & ~CLKCTRL_CFDEN_bm));
+}
+
+void CLKCTRL_AutoTuneEnable(void)
+{
+    CLKCTRL.OSCHFCTRLA |= CLKCTRL_AUTOTUNE_bm;
+}
+
+void CLKCTRL_AutoTuneDisable(void)
+{
+    CLKCTRL.OSCHFCTRLA &= ~(CLKCTRL_AUTOTUNE_bm);
+}
+
+bool CLKCTRL_TuneSet(uint8_t tuneValue)
+{
+    // manualTuneStatus = true  - Manual tuning was applied successfully.
+    // manualTuneStatus = false - Automatic tuning is enabled; manual tuning was not applied.
+    bool manualTuneStatus = false;
+
+    if((CLKCTRL.OSCHFCTRLA & CLKCTRL_AUTOTUNE_bm) == 0U)
+    {
+        CLKCTRL.OSCHFTUNE = tuneValue;
+        
+        manualTuneStatus = true;
+    }
+    return manualTuneStatus;
 }
 
 

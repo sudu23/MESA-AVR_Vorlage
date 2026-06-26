@@ -9,7 +9,7 @@
  *
  * @version Driver Version 1.0.3
  *
- * @version Package Version 4.3.0
+ * @version Package Version 4.3.1
 */
 /*
 © [2026] Microchip Technology Inc. and its subsidiaries.

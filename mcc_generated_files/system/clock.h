@@ -8,9 +8,9 @@
  *
  * @brief This header file provides APIs for the CLKCTRL driver.
  *
- * @version CLKCTRL Driver Version 1.1.4
+ * @version CLKCTRL Driver Version 1.2.0
  *
- * @version Package Version 2.0.10
+ * @version Package Version 2.2.0
 */
 /*
 © [2026] Microchip Technology Inc. and its subsidiaries.
@@ -66,5 +66,31 @@ void CFD_Enable(CLKCTRL_CFDSRC_t cfd_source);
  * @return None.
  */
 void CFD_Disable(void);
+
+/**
+ * @ingroup clkctrl
+ * @brief Enables the automatic tuning of the high-frequency oscillator.
+ * @param None.
+ * @return None.
+ */
+void CLKCTRL_AutoTuneEnable(void);
+
+/**
+ * @ingroup clkctrl
+ * @brief Disables the automatic tuning of the high-frequency oscillator.
+ * @param None.
+ * @return None.
+ */
+void CLKCTRL_AutoTuneDisable(void);
+
+/**
+ * @ingroup clkctrl
+ * @brief Sets the manual tuning value for the high-frequency oscillator when automatic tuning is disabled.
+ * @param tuneValue - The manual tuning value to be written to the oscillator.
+ * @return true  - Manual tuning was applied successfully.
+ * @return false - Automatic tuning is enabled; manual tuning was not applied.
+ */
+bool CLKCTRL_TuneSet(uint8_t tuneValue);
+
 
 #endif // CLOCK_H
