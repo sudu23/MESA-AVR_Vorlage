@@ -66,18 +66,7 @@
 int main(void)
 {
     //Local Variables
-    ds3234_time_t mytime = {0}; // Alle Felder mit 0 initialisieren
-    uint8_t tempdata;
-    float temperature;
-    
-    /*
-    mytime.year = 2026;
-    mytime.month = 6;
-    mytime.day = 19;
-    mytime.hour = 11;
-    mytime.minute = 25;
-    mytime.second = 0;
-    */
+    ds3234_time_t mytime = {0};
     
     // Initialization microcontroller
     SYSTEM_Initialize();
@@ -95,17 +84,31 @@ int main(void)
     RGBLED_B_SetHigh();
     
     // Initialization MESA-AVR-Extension Port-Expander (PCF8574)
-    //PCF8574_Init();
+    /*
+    if(!PCF8574_Init()){
+        printf("PCF8574 error\n");
+    }
+    */
     
     // Initialization MESA-AVR-Extension RTC (DS3234)
-    if(!DS3234_Init()){
+    /*if(!DS3234_Init()){
         printf("DS3234 error\n");
-        while(1){;}
-    }
-    //DS3234_SetTime(&mytime);
-    DS3234_GetTime(&mytime);
-    printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
-    printf("Datum: %u.%u.%u\n", (unsigned int)mytime.day, mytime.month, mytime.year);
+    }*/
+    
+    /*
+    //Set RTC-Time
+    mytime.year = 2026;
+    mytime.month = 6;
+    mytime.day = 19;
+    mytime.hour = 11;
+    mytime.minute = 25;
+    mytime.second = 0;
+    DS3234_SetTime(&mytime);
+    */
+    
+    //DS3234_GetTime(&mytime);
+    //printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
+    //printf("Datum: %u.%u.%u\n", (unsigned int)mytime.day, mytime.month, mytime.year);
     
     while(1)
     {
@@ -114,11 +117,11 @@ int main(void)
         HBLED_Toggle();
         
         //...programm...
-        //LEDS_C = (LEDS_C&~0xf0)|(TASTEN&0xf0); 
+        LEDS_C = ~TASTEN; 
         LEDS_D = SCHALTER_RECHTS | (SCHALTER_LINKS&0x0f)<<4;
         RGBLED_G_SetLow();
 
-        DS3234_GetTime(&mytime);
-        printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);        
+        //DS3234_GetTime(&mytime);
+        //printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);        
     }    
 }

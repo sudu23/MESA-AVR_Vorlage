@@ -79,36 +79,37 @@ static void DS3234_WriteRegister(uint8_t reg, uint8_t val) {
 }
 
 bool DS3234_Init(void) {
-    // 1. PORTC gezielt fuer SPI1-Betrieb umschreiben (Einkommentiert und erweitert!)
-    //PORTC.DIRSET = PIN0_bm | PIN2_bm | PIN3_bm; // PC0 (MOSI), PC2 (SCK), PC3 (CS) -> Ausgang
-    //PORTC.DIRCLR = PIN1_bm;                     // PC1 (MISO) -> Eingang
-    
+    //PORTC config for SPI1 io
+    PORTC.DIRSET = PIN0_bm | PIN2_bm | PIN3_bm; // PC0 (MOSI), PC2 (SCK), PC3 (CS) -> Ausgang
+    PORTC.DIRCLR = PIN1_bm;                     // PC1 (MISO) -> Eingang
+    PORTMUX.SPIROUTEA &= ~0x0C;                 //SPI1 = 0x0 DEFAULT (PC0/PC1/PC2)
+      
     DS3234_CS_INIT();
-    DS3234_CS_DESELECT(); // Direkt in den inaktiven Zustand (High) versetzen
+    DS3234_CS_DESELECT();
     
-    // SPI-Konfiguration laden
+    // load SPI1 host config (MCC)
     if(!SPI1_Open(HOST_CONFIG)){
         return false;
     }
     
-    _delay_ms(5); // Kurze Stabilisierungszeit nach dem Bus-Schnittstellen-Einschalten
+    _delay_ms(5);
     
-    // 2. Control Register auslesen und einstellen
+    // read, manipulate and write control register of RTC
     uint8_t control_reg = DS3234_ReadRegister(REG_CONTROL);
-    control_reg &= ~(1 << 7); // EOSC bit loeschen = Oszillator im Batteriebetrieb an
-    //control_reg |= (1 << 2);  // INTCN bit setzen = nINT Pin feuert Alarme
-    //control_reg |= (1 << 5);  // CONV bit setzen = Convert Temperatur
+    control_reg &= ~(1 << 7); // clear EOSC = oszillator in batterymode
+    //control_reg |= (1 << 2);  // set INTCN = nINT pin active
+    //control_reg |= (1 << 5);  // set CONV = convert temperatur
     DS3234_WriteRegister(REG_CONTROL, control_reg);
     
-    // Kontrolllesung zur Absicherung
+    // verify
     if(control_reg != DS3234_ReadRegister(REG_CONTROL)){
         return false;
     }
     
-    // Status Register (0x0F) pruefen / OSF (Oscillator Stop Flag) loeschen
+    // check status register (0x0F) / clear osf (oscillator stop flag)
     uint8_t status_reg = DS3234_ReadRegister(REG_STATUS);
     if (status_reg & (1 << 7)) {
-        // Oszillator stand still (z.B. nach Power-loss), Flag loeschen
+        // oszillator was off clear flag
         DS3234_WriteRegister(REG_STATUS, status_reg & ~(1 << 7));
     }
     

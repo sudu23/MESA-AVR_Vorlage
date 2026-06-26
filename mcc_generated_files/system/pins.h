@@ -76,63 +76,6 @@
 #define IO_PF0_EnableInterruptForLowLevelSensing() do { PORTF.PIN0CTRL = (PORTF.PIN0CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
 #define PF0_SetInterruptHandler IO_PF0_SetInterruptHandler
 
-//get/set IO_PC1 aliases
-#define IO_PC1_SetHigh() do { PORTC_OUTSET = 0x2; } while(0)
-#define IO_PC1_SetLow() do { PORTC_OUTCLR = 0x2; } while(0)
-#define IO_PC1_Toggle() do { PORTC_OUTTGL = 0x2; } while(0)
-#define IO_PC1_GetValue() (VPORTC.IN & (0x1 << 1))
-#define IO_PC1_SetDigitalInput() do { PORTC_DIRCLR = 0x2; } while(0)
-#define IO_PC1_SetDigitalOutput() do { PORTC_DIRSET = 0x2; } while(0)
-#define IO_PC1_SetPullUp() do { PORTC_PIN1CTRL  |= PORT_PULLUPEN_bm; } while(0)
-#define IO_PC1_ResetPullUp() do { PORTC_PIN1CTRL  &= ~PORT_PULLUPEN_bm; } while(0)
-#define IO_PC1_SetInverted() do { PORTC_PIN1CTRL  |= PORT_INVEN_bm; } while(0)
-#define IO_PC1_ResetInverted() do { PORTC_PIN1CTRL  &= ~PORT_INVEN_bm; } while(0)
-#define IO_PC1_DisableInterruptOnChange() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x0 ; } while(0)
-#define IO_PC1_EnableInterruptForBothEdges() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x1 ; } while(0)
-#define IO_PC1_EnableInterruptForRisingEdge() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x2 ; } while(0)
-#define IO_PC1_EnableInterruptForFallingEdge() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
-#define IO_PC1_DisableDigitalInputBuffer() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
-#define IO_PC1_EnableInterruptForLowLevelSensing() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
-#define PC1_SetInterruptHandler IO_PC1_SetInterruptHandler
-
-//get/set IO_PC0 aliases
-#define IO_PC0_SetHigh() do { PORTC_OUTSET = 0x1; } while(0)
-#define IO_PC0_SetLow() do { PORTC_OUTCLR = 0x1; } while(0)
-#define IO_PC0_Toggle() do { PORTC_OUTTGL = 0x1; } while(0)
-#define IO_PC0_GetValue() (VPORTC.IN & (0x1 << 0))
-#define IO_PC0_SetDigitalInput() do { PORTC_DIRCLR = 0x1; } while(0)
-#define IO_PC0_SetDigitalOutput() do { PORTC_DIRSET = 0x1; } while(0)
-#define IO_PC0_SetPullUp() do { PORTC_PIN0CTRL  |= PORT_PULLUPEN_bm; } while(0)
-#define IO_PC0_ResetPullUp() do { PORTC_PIN0CTRL  &= ~PORT_PULLUPEN_bm; } while(0)
-#define IO_PC0_SetInverted() do { PORTC_PIN0CTRL  |= PORT_INVEN_bm; } while(0)
-#define IO_PC0_ResetInverted() do { PORTC_PIN0CTRL  &= ~PORT_INVEN_bm; } while(0)
-#define IO_PC0_DisableInterruptOnChange() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x0 ; } while(0)
-#define IO_PC0_EnableInterruptForBothEdges() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x1 ; } while(0)
-#define IO_PC0_EnableInterruptForRisingEdge() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x2 ; } while(0)
-#define IO_PC0_EnableInterruptForFallingEdge() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
-#define IO_PC0_DisableDigitalInputBuffer() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
-#define IO_PC0_EnableInterruptForLowLevelSensing() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
-#define PC0_SetInterruptHandler IO_PC0_SetInterruptHandler
-
-//get/set IO_PC2 aliases
-#define IO_PC2_SetHigh() do { PORTC_OUTSET = 0x4; } while(0)
-#define IO_PC2_SetLow() do { PORTC_OUTCLR = 0x4; } while(0)
-#define IO_PC2_Toggle() do { PORTC_OUTTGL = 0x4; } while(0)
-#define IO_PC2_GetValue() (VPORTC.IN & (0x1 << 2))
-#define IO_PC2_SetDigitalInput() do { PORTC_DIRCLR = 0x4; } while(0)
-#define IO_PC2_SetDigitalOutput() do { PORTC_DIRSET = 0x4; } while(0)
-#define IO_PC2_SetPullUp() do { PORTC_PIN2CTRL  |= PORT_PULLUPEN_bm; } while(0)
-#define IO_PC2_ResetPullUp() do { PORTC_PIN2CTRL  &= ~PORT_PULLUPEN_bm; } while(0)
-#define IO_PC2_SetInverted() do { PORTC_PIN2CTRL  |= PORT_INVEN_bm; } while(0)
-#define IO_PC2_ResetInverted() do { PORTC_PIN2CTRL  &= ~PORT_INVEN_bm; } while(0)
-#define IO_PC2_DisableInterruptOnChange() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x0 ; } while(0)
-#define IO_PC2_EnableInterruptForBothEdges() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x1 ; } while(0)
-#define IO_PC2_EnableInterruptForRisingEdge() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x2 ; } while(0)
-#define IO_PC2_EnableInterruptForFallingEdge() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
-#define IO_PC2_DisableDigitalInputBuffer() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
-#define IO_PC2_EnableInterruptForLowLevelSensing() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
-#define PC2_SetInterruptHandler IO_PC2_SetInterruptHandler
-
 //get/set IO_PF3 aliases
 #define IO_PF3_SetHigh() do { PORTF_OUTSET = 0x8; } while(0)
 #define IO_PF3_SetLow() do { PORTF_OUTCLR = 0x8; } while(0)
@@ -513,6 +456,63 @@
 #define RGBLED_B_EnableInterruptForLowLevelSensing() do { PORTB.PIN5CTRL = (PORTB.PIN5CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
 #define PB5_SetInterruptHandler RGBLED_B_SetInterruptHandler
 
+//get/set IO_PC0 aliases
+#define IO_PC0_SetHigh() do { PORTC_OUTSET = 0x1; } while(0)
+#define IO_PC0_SetLow() do { PORTC_OUTCLR = 0x1; } while(0)
+#define IO_PC0_Toggle() do { PORTC_OUTTGL = 0x1; } while(0)
+#define IO_PC0_GetValue() (VPORTC.IN & (0x1 << 0))
+#define IO_PC0_SetDigitalInput() do { PORTC_DIRCLR = 0x1; } while(0)
+#define IO_PC0_SetDigitalOutput() do { PORTC_DIRSET = 0x1; } while(0)
+#define IO_PC0_SetPullUp() do { PORTC_PIN0CTRL  |= PORT_PULLUPEN_bm; } while(0)
+#define IO_PC0_ResetPullUp() do { PORTC_PIN0CTRL  &= ~PORT_PULLUPEN_bm; } while(0)
+#define IO_PC0_SetInverted() do { PORTC_PIN0CTRL  |= PORT_INVEN_bm; } while(0)
+#define IO_PC0_ResetInverted() do { PORTC_PIN0CTRL  &= ~PORT_INVEN_bm; } while(0)
+#define IO_PC0_DisableInterruptOnChange() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x0 ; } while(0)
+#define IO_PC0_EnableInterruptForBothEdges() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x1 ; } while(0)
+#define IO_PC0_EnableInterruptForRisingEdge() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x2 ; } while(0)
+#define IO_PC0_EnableInterruptForFallingEdge() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
+#define IO_PC0_DisableDigitalInputBuffer() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
+#define IO_PC0_EnableInterruptForLowLevelSensing() do { PORTC.PIN0CTRL = (PORTC.PIN0CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
+#define PC0_SetInterruptHandler IO_PC0_SetInterruptHandler
+
+//get/set IO_PC1 aliases
+#define IO_PC1_SetHigh() do { PORTC_OUTSET = 0x2; } while(0)
+#define IO_PC1_SetLow() do { PORTC_OUTCLR = 0x2; } while(0)
+#define IO_PC1_Toggle() do { PORTC_OUTTGL = 0x2; } while(0)
+#define IO_PC1_GetValue() (VPORTC.IN & (0x1 << 1))
+#define IO_PC1_SetDigitalInput() do { PORTC_DIRCLR = 0x2; } while(0)
+#define IO_PC1_SetDigitalOutput() do { PORTC_DIRSET = 0x2; } while(0)
+#define IO_PC1_SetPullUp() do { PORTC_PIN1CTRL  |= PORT_PULLUPEN_bm; } while(0)
+#define IO_PC1_ResetPullUp() do { PORTC_PIN1CTRL  &= ~PORT_PULLUPEN_bm; } while(0)
+#define IO_PC1_SetInverted() do { PORTC_PIN1CTRL  |= PORT_INVEN_bm; } while(0)
+#define IO_PC1_ResetInverted() do { PORTC_PIN1CTRL  &= ~PORT_INVEN_bm; } while(0)
+#define IO_PC1_DisableInterruptOnChange() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x0 ; } while(0)
+#define IO_PC1_EnableInterruptForBothEdges() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x1 ; } while(0)
+#define IO_PC1_EnableInterruptForRisingEdge() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x2 ; } while(0)
+#define IO_PC1_EnableInterruptForFallingEdge() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
+#define IO_PC1_DisableDigitalInputBuffer() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
+#define IO_PC1_EnableInterruptForLowLevelSensing() do { PORTC.PIN1CTRL = (PORTC.PIN1CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
+#define PC1_SetInterruptHandler IO_PC1_SetInterruptHandler
+
+//get/set IO_PC2 aliases
+#define IO_PC2_SetHigh() do { PORTC_OUTSET = 0x4; } while(0)
+#define IO_PC2_SetLow() do { PORTC_OUTCLR = 0x4; } while(0)
+#define IO_PC2_Toggle() do { PORTC_OUTTGL = 0x4; } while(0)
+#define IO_PC2_GetValue() (VPORTC.IN & (0x1 << 2))
+#define IO_PC2_SetDigitalInput() do { PORTC_DIRCLR = 0x4; } while(0)
+#define IO_PC2_SetDigitalOutput() do { PORTC_DIRSET = 0x4; } while(0)
+#define IO_PC2_SetPullUp() do { PORTC_PIN2CTRL  |= PORT_PULLUPEN_bm; } while(0)
+#define IO_PC2_ResetPullUp() do { PORTC_PIN2CTRL  &= ~PORT_PULLUPEN_bm; } while(0)
+#define IO_PC2_SetInverted() do { PORTC_PIN2CTRL  |= PORT_INVEN_bm; } while(0)
+#define IO_PC2_ResetInverted() do { PORTC_PIN2CTRL  &= ~PORT_INVEN_bm; } while(0)
+#define IO_PC2_DisableInterruptOnChange() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x0 ; } while(0)
+#define IO_PC2_EnableInterruptForBothEdges() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x1 ; } while(0)
+#define IO_PC2_EnableInterruptForRisingEdge() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x2 ; } while(0)
+#define IO_PC2_EnableInterruptForFallingEdge() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x3 ; } while(0)
+#define IO_PC2_DisableDigitalInputBuffer() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x4 ; } while(0)
+#define IO_PC2_EnableInterruptForLowLevelSensing() do { PORTC.PIN2CTRL = (PORTC.PIN2CTRL & ~PORT_ISC_gm) | 0x5 ; } while(0)
+#define PC2_SetInterruptHandler IO_PC2_SetInterruptHandler
+
 //get/set IO_PC3 aliases
 #define IO_PC3_SetHigh() do { PORTC_OUTSET = 0x8; } while(0)
 #define IO_PC3_SetLow() do { PORTC_OUTCLR = 0x8; } while(0)
@@ -847,69 +847,6 @@ void IO_PF0_DefaultInterruptHandler(void);
  * @return none
  */
 void IO_PF0_SetInterruptHandler(void (* interruptHandler)(void)) ; 
-
-/**
- * @ingroup  pinsdriver
- * @brief Default Interrupt Handler for IO_PC1 pin. 
- *        This is a predefined interrupt handler to be used together with the IO_PC1_SetInterruptHandler() method.
- *        This handler is called every time the IO_PC1 ISR is executed. 
- * @pre PIN_MANAGER_Initialize() has been called at least once
- * @param none
- * @return none
- */
-void IO_PC1_DefaultInterruptHandler(void);
-
-/**
- * @ingroup  pinsdriver
- * @brief Interrupt Handler Setter for IO_PC1 pin input-sense-config functionality.
- *        Allows selecting an interrupt handler for IO_PC1 at application runtime
- * @pre PIN_MANAGER_Initialize() has been called at least once
- * @param InterruptHandler function pointer.
- * @return none
- */
-void IO_PC1_SetInterruptHandler(void (* interruptHandler)(void)) ; 
-
-/**
- * @ingroup  pinsdriver
- * @brief Default Interrupt Handler for IO_PC0 pin. 
- *        This is a predefined interrupt handler to be used together with the IO_PC0_SetInterruptHandler() method.
- *        This handler is called every time the IO_PC0 ISR is executed. 
- * @pre PIN_MANAGER_Initialize() has been called at least once
- * @param none
- * @return none
- */
-void IO_PC0_DefaultInterruptHandler(void);
-
-/**
- * @ingroup  pinsdriver
- * @brief Interrupt Handler Setter for IO_PC0 pin input-sense-config functionality.
- *        Allows selecting an interrupt handler for IO_PC0 at application runtime
- * @pre PIN_MANAGER_Initialize() has been called at least once
- * @param InterruptHandler function pointer.
- * @return none
- */
-void IO_PC0_SetInterruptHandler(void (* interruptHandler)(void)) ; 
-
-/**
- * @ingroup  pinsdriver
- * @brief Default Interrupt Handler for IO_PC2 pin. 
- *        This is a predefined interrupt handler to be used together with the IO_PC2_SetInterruptHandler() method.
- *        This handler is called every time the IO_PC2 ISR is executed. 
- * @pre PIN_MANAGER_Initialize() has been called at least once
- * @param none
- * @return none
- */
-void IO_PC2_DefaultInterruptHandler(void);
-
-/**
- * @ingroup  pinsdriver
- * @brief Interrupt Handler Setter for IO_PC2 pin input-sense-config functionality.
- *        Allows selecting an interrupt handler for IO_PC2 at application runtime
- * @pre PIN_MANAGER_Initialize() has been called at least once
- * @param InterruptHandler function pointer.
- * @return none
- */
-void IO_PC2_SetInterruptHandler(void (* interruptHandler)(void)) ; 
 
 /**
  * @ingroup  pinsdriver
@@ -1330,6 +1267,69 @@ void RGBLED_B_DefaultInterruptHandler(void);
  * @return none
  */
 void RGBLED_B_SetInterruptHandler(void (* interruptHandler)(void)) ; 
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Default Interrupt Handler for IO_PC0 pin. 
+ *        This is a predefined interrupt handler to be used together with the IO_PC0_SetInterruptHandler() method.
+ *        This handler is called every time the IO_PC0 ISR is executed. 
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param none
+ * @return none
+ */
+void IO_PC0_DefaultInterruptHandler(void);
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Interrupt Handler Setter for IO_PC0 pin input-sense-config functionality.
+ *        Allows selecting an interrupt handler for IO_PC0 at application runtime
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param InterruptHandler function pointer.
+ * @return none
+ */
+void IO_PC0_SetInterruptHandler(void (* interruptHandler)(void)) ; 
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Default Interrupt Handler for IO_PC1 pin. 
+ *        This is a predefined interrupt handler to be used together with the IO_PC1_SetInterruptHandler() method.
+ *        This handler is called every time the IO_PC1 ISR is executed. 
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param none
+ * @return none
+ */
+void IO_PC1_DefaultInterruptHandler(void);
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Interrupt Handler Setter for IO_PC1 pin input-sense-config functionality.
+ *        Allows selecting an interrupt handler for IO_PC1 at application runtime
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param InterruptHandler function pointer.
+ * @return none
+ */
+void IO_PC1_SetInterruptHandler(void (* interruptHandler)(void)) ; 
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Default Interrupt Handler for IO_PC2 pin. 
+ *        This is a predefined interrupt handler to be used together with the IO_PC2_SetInterruptHandler() method.
+ *        This handler is called every time the IO_PC2 ISR is executed. 
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param none
+ * @return none
+ */
+void IO_PC2_DefaultInterruptHandler(void);
+
+/**
+ * @ingroup  pinsdriver
+ * @brief Interrupt Handler Setter for IO_PC2 pin input-sense-config functionality.
+ *        Allows selecting an interrupt handler for IO_PC2 at application runtime
+ * @pre PIN_MANAGER_Initialize() has been called at least once
+ * @param InterruptHandler function pointer.
+ * @return none
+ */
+void IO_PC2_SetInterruptHandler(void (* interruptHandler)(void)) ; 
 
 /**
  * @ingroup  pinsdriver
