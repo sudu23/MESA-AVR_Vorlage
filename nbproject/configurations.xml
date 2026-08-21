@@ -48,8 +48,8 @@
       </logicalFolder>
       <itemPath>cyclesync.h</itemPath>
       <itemPath>printf.h</itemPath>
-      <itemPath>PCF8574.h</itemPath>
       <itemPath>DS3234.h</itemPath>
+      <itemPath>PCF8574A.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -96,8 +96,8 @@
       <itemPath>main.c</itemPath>
       <itemPath>cyclesync.c</itemPath>
       <itemPath>printf.c</itemPath>
-      <itemPath>PCF8574.c</itemPath>
       <itemPath>DS3234.c</itemPath>
+      <itemPath>PCF8574A.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -117,7 +117,7 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.7.321"/>
+        <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.8.343"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -367,8 +367,6 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="T:/E/PROJEKTE/P2024/E43-221-PR_MESA-AVR/MESA-AVR_FW/Entwicklung/MPLABX/Vorlage.X/debug/default/Vorlage_ptg"/>
         <property key="programmerToGoImageName" value="default_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
