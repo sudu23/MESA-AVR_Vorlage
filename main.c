@@ -40,7 +40,7 @@
 #include "util/delay.h"
 #include "cyclesync.h"
 #include "printf.h"
-#include "PCF8574.h"
+#include "PCF8574A.h"
 #include "DS3234.h"
 
 /*------------------------------------------------------------------------------
@@ -67,6 +67,8 @@ int main(void)
 {
     //Local Variables
     ds3234_time_t mytime = {0};
+    uint8_t value = 0;
+    bool rtc_int;
     
     // Initialization microcontroller
     SYSTEM_Initialize();
@@ -84,31 +86,29 @@ int main(void)
     RGBLED_B_SetHigh();
     
     // Initialization MESA-AVR-Extension Port-Expander (PCF8574)
-    /*
-    if(!PCF8574_Init()){
+    if(!PCF8574A_Init()){
         printf("PCF8574 error\n");
+        RGBLED_R_SetLow();
     }
-    */
     
     // Initialization MESA-AVR-Extension RTC (DS3234)
-    /*if(!DS3234_Init()){
+    if(!DS3234_Init()){
         printf("DS3234 error\n");
-    }*/
+        RGBLED_R_SetLow();
+    }
     
-    /*
     //Set RTC-Time
-    mytime.year = 2026;
-    mytime.month = 6;
-    mytime.day = 19;
-    mytime.hour = 11;
-    mytime.minute = 25;
-    mytime.second = 0;
-    DS3234_SetTime(&mytime);
-    */
+//    mytime.year = 2026;
+//    mytime.month = 8;
+//    mytime.day = 20;
+//    mytime.hour = 15;
+//    mytime.minute = 22;
+//    mytime.second = 0;
+//    DS3234_SetTime(&mytime);
     
-    //DS3234_GetTime(&mytime);
-    //printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
-    //printf("Datum: %u.%u.%u\n", (unsigned int)mytime.day, mytime.month, mytime.year);
+    DS3234_GetTime(&mytime);
+    printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
+    printf("Datum: %u.%u.%u\n", (unsigned int)mytime.day, mytime.month, mytime.year);
     
     while(1)
     {
@@ -119,9 +119,16 @@ int main(void)
         //...programm...
         LEDS_C = ~TASTEN; 
         LEDS_D = SCHALTER_RECHTS | (SCHALTER_LINKS&0x0f)<<4;
-        RGBLED_G_SetLow();
 
-        //DS3234_GetTime(&mytime);
-        //printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);        
+        PCF8574A_WriteByte(PCF8574A_PF,value);        
+        PCF8574A_WriteByte(PCF8574A_PG, (0xff-value));
+        value++;
+        
+        PCF8574A_MIXEDSIGNALS_SetLED1(value&0x01);
+        PCF8574A_ReadPin(PCF8574A_MIXEDSIGNALS,6,&rtc_int);       
+        PCF8574A_MIXEDSIGNALS_SetLED2(rtc_int);
+        
+        DS3234_GetTime(&mytime);
+        printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);        
     }    
 }
