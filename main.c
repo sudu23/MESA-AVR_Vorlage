@@ -42,6 +42,7 @@
 #include "printf.h"
 #include "PCF8574A.h"
 #include "DS3234.h"
+#include "MCP23008.h"
 
 /*------------------------------------------------------------------------------
     Defines 
@@ -85,17 +86,8 @@ int main(void)
     RGBLED_G_SetHigh();
     RGBLED_B_SetHigh();
     
-    // Initialization MESA-AVR-Extension Port-Expander (PCF8574)
-    if(!PCF8574A_Init()){
-        printf("PCF8574 error\n");
-        RGBLED_R_SetLow();
-    }
-    
-    // Initialization MESA-AVR-Extension RTC (DS3234)
-    if(!DS3234_Init()){
-        printf("DS3234 error\n");
-        RGBLED_R_SetLow();
-    }
+    // Initialization MESA-AVR-Extension Port-Expander
+    //MCP23008_Init();
     
     //Set RTC-Time
 //    mytime.year = 2026;
@@ -106,7 +98,7 @@ int main(void)
 //    mytime.second = 0;
 //    DS3234_SetTime(&mytime);
     
-    DS3234_GetTime(&mytime);
+    //DS3234_GetTime(&mytime);
     printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);
     printf("Datum: %u.%u.%u\n", (unsigned int)mytime.day, mytime.month, mytime.year);
     
@@ -120,15 +112,15 @@ int main(void)
         LEDS_C = ~TASTEN; 
         LEDS_D = SCHALTER_RECHTS | (SCHALTER_LINKS&0x0f)<<4;
 
-        PCF8574A_WriteByte(PCF8574A_PF,value);        
-        PCF8574A_WriteByte(PCF8574A_PG, (0xff-value));
+        MCP23008_WriteByte(PCF8574A_PF,value);        
+        MCP23008_WriteByte(PCF8574A_PG, (0xff-value));
         value++;
         
-        PCF8574A_MIXEDSIGNALS_SetLED1(value&0x01);
-        PCF8574A_ReadPin(PCF8574A_MIXEDSIGNALS,6,&rtc_int);       
-        PCF8574A_MIXEDSIGNALS_SetLED2(rtc_int);
+        MCP23008_MIXEDSIGNALS_SetLED1(value&0x01);
+        MCP23008_ReadPin(PCF8574A_MIXEDSIGNALS,6,&rtc_int);       
+        MCP23008_MIXEDSIGNALS_SetLED2(rtc_int);
         
-        DS3234_GetTime(&mytime);
+        //DS3234_GetTime(&mytime);
         printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);        
     }    
 }
