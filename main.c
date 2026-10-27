@@ -39,7 +39,7 @@
 #include "mcc_generated_files/system/system.h"
 #include "util/delay.h"
 #include "cyclesync.h"
-#include "printf.h"
+#include "uart_stdout.h"
 #include "PCF8574A.h"
 #include "DS3234.h"
 #include "MCP23008.h"
