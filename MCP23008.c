@@ -27,7 +27,7 @@ extern bool TWI1_IsBusy(void);
 static const uint8_t mcp23008_addresses[MCP23008_NUM_DEVICES] = {
     MCP23008_PF_ADDR,
     MCP23008_PG_ADDR,
-    MCP23008_MIXEDSIGNALS_ADDR
+    MCP23008_PH_ADDR
 };
 
 // Shadow-Register zur Speicherung des aktuellen Ausgangszustands.
@@ -83,7 +83,7 @@ bool MCP23008_Init(void) {
         // IODIR konfigurieren: 
         // Fuer IC3 definieren wir P4, P5, P6 als Ausgang (0), P7 als Eingang (1), Rest nach Bedarf (hier standardmaessig 0xFF)
         uint8_t iodir_val = 0xFF;
-        if (i == MCP23008_MIXEDSIGNALS) {
+        if (i == MCP23008_PH) {
             iodir_val = ~( (1 << IC3_LED1_PIN) | (1 << IC3_LED2_PIN) | (1 << IC3_DS3234_RST_PIN) );
         }
         
@@ -137,18 +137,18 @@ bool MCP23008_ReadPin(mcp23008_id_t id, uint8_t pin, bool *level) {
 }
 
 // --- Komfortfunktionen fuer IC3 ---
-bool MCP23008_MIXEDSIGNALS_SetLED1(bool turnOn) {
-    return MCP23008_WritePin(MCP23008_MIXEDSIGNALS, IC3_LED1_PIN, !turnOn);
+bool MCP23008_PH_SetLED1(bool turnOn) {
+    return MCP23008_WritePin(MCP23008_PH, IC3_LED1_PIN, !turnOn);
 }
 
-bool MCP23008_MIXEDSIGNALS_SetLED2(bool turnOn) {
-    return MCP23008_WritePin(MCP23008_MIXEDSIGNALS, IC3_LED2_PIN, !turnOn);
+bool MCP23008_PH_SetLED2(bool turnOn) {
+    return MCP23008_WritePin(MCP23008_PH, IC3_LED2_PIN, !turnOn);
 }
 
-bool MCP23008_MIXEDSIGNALS_SetDS3234Reset(bool active) {
-    return MCP23008_WritePin(MCP23008_MIXEDSIGNALS, IC3_DS3234_RST_PIN, !active);
+bool MCP23008_PH_SetDS3234Reset(bool active) {
+    return MCP23008_WritePin(MCP23008_PH, IC3_DS3234_RST_PIN, !active);
 }
 
-bool MCP23008_MIXEDSIGNALS_GetDS3234Interrupt(bool *level) {
-    return MCP23008_ReadPin(MCP23008_MIXEDSIGNALS, IC3_DS3234_INT_PIN, level);
+bool MCP23008_PH_GetDS3234Interrupt(bool *level) {
+    return MCP23008_ReadPin(MCP23008_PH, IC3_DS3234_INT_PIN, level);
 }

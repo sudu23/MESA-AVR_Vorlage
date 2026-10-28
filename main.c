@@ -116,9 +116,9 @@ int main(void)
         MCP23008_WriteByte(PCF8574A_PG, (0xff-value));
         value++;
         
-        MCP23008_MIXEDSIGNALS_SetLED1(value&0x01);
+        MCP23008_PH_SetLED1(value&0x01);
         MCP23008_ReadPin(PCF8574A_MIXEDSIGNALS,6,&rtc_int);       
-        MCP23008_MIXEDSIGNALS_SetLED2(rtc_int);
+        MCP23008_PH_SetLED2(rtc_int);
         
         //DS3234_GetTime(&mytime);
         printf("Zeit: %u:%u\n", (unsigned int)mytime.hour, (unsigned int)mytime.minute);        

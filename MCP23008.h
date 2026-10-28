@@ -20,7 +20,7 @@ extern "C" {
 // Definition der drei ICs
 #define MCP23008_PF_ADDR           (MCP23008_BASE_ADDR | 0x00) // 0x20
 #define MCP23008_PG_ADDR           (MCP23008_BASE_ADDR | 0x01) // 0x21
-#define MCP23008_MIXEDSIGNALS_ADDR (MCP23008_BASE_ADDR | 0x02) // 0x22
+#define MCP23008_PH_ADDR           (MCP23008_BASE_ADDR | 0x02) // 0x22
 
 // Spezifische Pins fuer IC3 (Spezialfunktionen)
 #define IC3_LED1_PIN        4  // PH4: lowaktive LED
@@ -32,7 +32,7 @@ extern "C" {
 typedef enum {
     MCP23008_PF = 0,
     MCP23008_PG,
-    MCP23008_MIXEDSIGNALS,
+    MCP23008_PH,
     MCP23008_NUM_DEVICES
 } mcp23008_id_t;
 
@@ -52,10 +52,10 @@ bool MCP23008_WritePin(mcp23008_id_t id, uint8_t pin, bool level);
 bool MCP23008_ReadPin(mcp23008_id_t id, uint8_t pin, bool *level);
 
 // --- Komfortfunktionen fuer IC3 Spezialpins ---
-bool MCP23008_MIXEDSIGNALS_SetLED1(bool turnOn);
-bool MCP23008_MIXEDSIGNALS_SetLED2(bool turnOn);
-bool MCP23008_MIXEDSIGNALS_SetDS3234Reset(bool active);
-bool MCP23008_MIXEDSIGNALS_GetDS3234Interrupt(bool *level);
+bool MCP23008_PH_SetLED1(bool turnOn);
+bool MCP23008_PH_SetLED2(bool turnOn);
+bool MCP23008_PH_SetDS3234Reset(bool active);
+bool MCP23008_PH_GetDS3234Interrupt(bool *level);
 
 #ifdef __cplusplus
 }
